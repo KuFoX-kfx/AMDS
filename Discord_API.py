@@ -42,19 +42,25 @@ class Discord_API:
         elif(UA=="random"): self.UA = fake_useragent.UserAgent.random()
         else: self.UA = UA
         #Request
-        response = requests.get('https://discord.com/api/v9/users/@me',
-                                headers={"authorization": self.API_KEY, 
-                                         'User-Agent': UA})
-        #Get answer
-        if (response.status_code==200 or response.status_code==201):
-            print("LOG | All OK")
-        if (response.status_code>=400):
-            print(f"ERROR | Error in api discord | {response.reason}")
+        response = requests.get('https://discord.com/api/v9/users/@me', headers={"authorization": self.API_KEY, 'User-Agent': self.UA})
+        #Print in console status of how init API
+        print(f"INFO | UA: {self.UA}")
+        print(f"INFO | API KEY: {self.API_KEY}")
+        #Print in console status of init API
+        if (response.status_code==200 or response.status_code==201): print("LOG | Init Successfully")
+        else: print(f"ERROR | Error in api discord | Code: {response.status_code}. Desc: {response.reason}")
         
-    def set_status(self, text=None, emoji=None):
+    def set_cstatus(self, text=None, emoji=None):
         try: response = requests.patch('https://discord.com/api/v9/users/@me/settings', headers={"authorization": self.API_KEY, 'User-Agent': self.UA}, json={'custom_status': {"text": text, 'emoji_name': emoji}})
-        except: print("ERROR | Status Not CHANGE")
-        print(f"LOG | Change Status | {response.reason}")
+        except: print("CRITICAL ERROR | Status Not CHANGE")
+        if(response.status_code==200 or response.status_code==201): print(f"LOG | Change Status | {response.reason}")
+        else: print(f"ERROR | STATUS NOT CHANGED | Code: {response.status_code}. Desc: {response.reason}")
         
     def get_all(self):
         return requests.get('https://discord.com/api/v9/users/@me/settings', headers={"authorization": self.API_KEY, 'User-Agent': self.UA}).json()
+    
+    def clear_cstatus(self):
+        response = requests.patch('https://discord.com/api/v9/users/@me/settings', headers={"authorization": self.API_KEY, 'User-Agent': self.UA}, json={'custom_status': None})
+        if(response.status_code==200 or response.status_code==201): print(f"LOG | Change Status | {response.reason}")
+        else: print(f"ERROR | STATUS NOT CLEARED | Code: {response.status_code}. Desc: {response.reason}")
+        
