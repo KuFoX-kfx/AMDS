@@ -9,18 +9,24 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         
         QtWidgets.QSystemTrayIcon.__init__(self, icon, parent)
         self.setToolTip('Animate my discord status')
-        menu = QtWidgets.QMenu(parent)
-        menu.addAction("AMDS By KuFoX").setEnabled(False)
+        self.menu = QtWidgets.QMenu(parent)
+        self.menu.addAction("AMDS By KuFoX").setEnabled(False)
         
-        menu.addSeparator()
+        self.menu.addSeparator()
 
-        settings = menu.addAction("Open Settings")
-        settings.triggered.connect(self.activate_ui)
-        settings.setIcon(QtGui.QIcon("icon.png"))
+        self.settings = self.menu.addAction("Open Settings")
+        #settings.triggered.connect()
+        self.settings.setIcon(QtGui.QIcon("icon.png"))
 
-        menu.addSeparator()
-        self.setContextMenu(menu)
-        self.activated.connect(self.onTrayIconActivated)
+        self.start = self.menu.addAction("Start")
+        self.start.setIcon(QtGui.QIcon("icon.png"))
+        
+        self.stop = self.menu.addAction("Stop")
+        self.stop.setIcon(QtGui.QIcon("icon.png"))
+
+        self.menu.addSeparator()
+        self.setContextMenu(self.menu)
+        #self.activated.connect(self.onTrayIconActivated)
 
     def activate_ui(self):
         from main import import_ui
