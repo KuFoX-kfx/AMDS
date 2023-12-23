@@ -1,38 +1,38 @@
 import sys
 import threading
 from PyQt5 import QtWidgets, QtGui
-
+import time
+import Discord_API
+import json
 
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
-    def __init__(self, icon, parent=None):
-        
+    def __init__(self, icon=None, parent=None):
+        self.animate = True
         QtWidgets.QSystemTrayIcon.__init__(self, icon, parent)
         self.setToolTip('Animate my discord status')
+        
         self.menu = QtWidgets.QMenu(parent)
         self.menu.addAction("AMDS By KuFoX").setEnabled(False)
         
         self.menu.addSeparator()
 
         self.settings = self.menu.addAction("Open Settings")
-        #settings.triggered.connect()
         self.settings.setIcon(QtGui.QIcon("icon.png"))
 
-        self.start = self.menu.addAction("Start")
-        self.start.setIcon(QtGui.QIcon("icon.png"))
+        self.startbtn = self.menu.addAction("Start")
+        self.startbtn.setIcon(QtGui.QIcon("icon.png"))
         
-        self.stop = self.menu.addAction("Stop")
-        self.stop.setIcon(QtGui.QIcon("icon.png"))
+        self.stopbtn = self.menu.addAction("Stop")
+        self.stopbtn.setIcon(QtGui.QIcon("icon.png"))
 
         self.menu.addSeparator()
         self.setContextMenu(self.menu)
         #self.activated.connect(self.onTrayIconActivated)
-
-    def activate_ui(self):
-        from main import import_ui
-        threading.Thread(target=lambda: import_ui()).start()
         
-    
+        self.startbtn.triggered.connect(self.setstart)
+        self.stopbtn.triggered.connect(self.setstop)
+        
     def onTrayIconActivated(self, reason):
         """
         This function will trigger function on click or double click
@@ -42,11 +42,31 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # if reason == self.Trigger:
         #     self.open_notepad()
 
+    def setstart(self):
+        self.animate = True
+        self.startbtn.setEnabled(False)
+        self.stopbtn.setEnabled(True)
+        
+    def setstop(self):
+        self.animate = False
+        self.startbtn.setEnabled(True)
+        self.stopbtn.setEnabled(False)
+                
+def getanimate():
+    return SystemTrayIcon
+    
+    
 
-def main():
+        
+def start():
     app = QtWidgets.QApplication(sys.argv)
     w = QtWidgets.QWidget()
     tray_icon = SystemTrayIcon(QtGui.QIcon("icon.png"), w)
     tray_icon.show()
-    tray_icon.showMessage('VFX Pipeline', 'Hello "Name of logged in ID')
+    tray_icon.showMessage('Animate my discord status', 'Start the AMDS')
+    
     sys.exit(app.exec_())
+    
+
+        
+        
