@@ -5,9 +5,12 @@ import time
 import Discord_API
 import json
 
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
 class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
-    def __init__(self, icon=None, parent=None):
+    def __init__(self, icon, parent):
         self.animate = True
         QtWidgets.QSystemTrayIcon.__init__(self, icon, parent)
         self.setToolTip('Animate my discord status')
@@ -52,8 +55,7 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self.startbtn.setEnabled(True)
         self.stopbtn.setEnabled(False)
                 
-def getanimate():
-    return SystemTrayIcon
+    
     
     
 
@@ -61,11 +63,15 @@ def getanimate():
 def start():
     app = QtWidgets.QApplication(sys.argv)
     w = QtWidgets.QWidget()
+    global tray_icon
     tray_icon = SystemTrayIcon(QtGui.QIcon("icon.png"), w)
     tray_icon.show()
     tray_icon.showMessage('Animate my discord status', 'Start the AMDS')
     
     sys.exit(app.exec_())
+    
+def getanimate():
+    return SystemTrayIcon.animate
     
 
         
