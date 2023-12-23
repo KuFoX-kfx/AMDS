@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>190</height>
+    <width>460</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -57,7 +57,7 @@
      <enum>Qt::SolidLine</enum>
     </property>
     <property name="rowCount">
-     <number>2</number>
+     <number>1</number>
     </property>
     <attribute name="horizontalHeaderVisible">
      <bool>true</bool>
@@ -71,7 +71,6 @@
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>100</number>
     </attribute>
-    <row/>
     <row/>
     <column>
      <property name="text">
@@ -93,43 +92,16 @@
       <string>Status</string>
      </property>
     </column>
-   </widget>
-   <widget class="QSpinBox" name="SPNBOX_Time">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>10</y>
-      <width>41</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-    <property name="buttonSymbols">
-     <enum>QAbstractSpinBox::UpDownArrows</enum>
-    </property>
-    <property name="correctionMode">
-     <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
-    </property>
-    <property name="minimum">
-     <number>5</number>
-    </property>
-    <property name="maximum">
-     <number>1200</number>
-    </property>
-    <property name="value">
-     <number>15</number>
-    </property>
-    <property name="displayIntegerBase">
-     <number>15</number>
-    </property>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>10</y>
+      <x>10</x>
+      <y>200</y>
       <width>131</width>
       <height>21</height>
      </rect>
@@ -144,8 +116,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>40</y>
+      <x>10</x>
+      <y>170</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -160,9 +132,9 @@
    <widget class="QComboBox" name="CMBBOX_Status">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>40</y>
-      <width>61</width>
+      <x>130</x>
+      <y>170</y>
+      <width>71</width>
       <height>22</height>
      </rect>
     </property>
@@ -190,8 +162,8 @@
    <widget class="QPushButton" name="PSHBTN_Start">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>140</y>
+      <x>380</x>
+      <y>200</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -203,8 +175,8 @@
    <widget class="QPushButton" name="PSHBTN_Stop">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>140</y>
+      <x>380</x>
+      <y>170</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -213,20 +185,96 @@
      <string>Stop</string>
     </property>
    </widget>
-   <zorder>SPNBOX_Time</zorder>
+   <widget class="QPushButton" name="PSHBTN_Update">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>200</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Update</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PSHBTN_Save">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>170</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="SPNBOX_Time">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>200</y>
+      <width>51</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+    <property name="minimum">
+     <number>15</number>
+    </property>
+    <property name="maximum">
+     <number>1200</number>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="PRGRSBAR_CurrentStep">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>170</y>
+      <width>21</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>50</number>
+    </property>
+    <property name="value">
+     <number>25</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="textDirection">
+     <enum>QProgressBar::TopToBottom</enum>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>CMBBOX_Status</zorder>
    <zorder>TBLW_main</zorder>
    <zorder>PSHBTN_Start</zorder>
    <zorder>PSHBTN_Stop</zorder>
+   <zorder>PSHBTN_Update</zorder>
+   <zorder>PSHBTN_Save</zorder>
+   <zorder>SPNBOX_Time</zorder>
+   <zorder>PRGRSBAR_CurrentStep</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>650</width>
+     <width>460</width>
      <height>21</height>
     </rect>
    </property>

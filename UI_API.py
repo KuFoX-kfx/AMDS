@@ -10,6 +10,8 @@ class UI_API:
         self.app = QtWidgets.QApplication(sys.argv)
         self.STRT = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
+        self.app.setWindowIcon(QtGui.QIcon("AMDS.png"))        
+        
         self.ui.setupUi(self.STRT)
         
     def show(self):
