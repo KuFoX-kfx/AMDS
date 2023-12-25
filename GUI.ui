@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>460</width>
-    <height>290</height>
+    <height>320</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,23 +38,11 @@
       <height>151</height>
      </rect>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
-    </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOn</enum>
     </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QAbstractScrollArea::AdjustIgnored</enum>
-    </property>
-    <property name="gridStyle">
-     <enum>Qt::SolidLine</enum>
     </property>
     <property name="rowCount">
      <number>0</number>
@@ -62,20 +50,8 @@
     <property name="columnCount">
      <number>4</number>
     </property>
-    <attribute name="horizontalHeaderVisible">
-     <bool>true</bool>
-    </attribute>
-    <attribute name="horizontalHeaderCascadingSectionResizes">
-     <bool>false</bool>
-    </attribute>
     <attribute name="horizontalHeaderMinimumSectionSize">
      <number>39</number>
-    </attribute>
-    <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>100</number>
-    </attribute>
-    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-     <bool>false</bool>
     </attribute>
     <column>
      <property name="text">
@@ -273,7 +249,7 @@
      <rect>
       <x>0</x>
       <y>240</y>
-      <width>91</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
@@ -293,6 +269,9 @@
       <height>21</height>
      </rect>
     </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
@@ -300,9 +279,9 @@
    <widget class="QLineEdit" name="LNEDIT_APIToken">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>240</y>
-      <width>271</width>
+      <width>131</width>
       <height>20</height>
      </rect>
     </property>
@@ -313,7 +292,7 @@
    <widget class="QCheckBox" name="CHKBOX_APIToken">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>250</x>
       <y>240</y>
       <width>71</width>
       <height>21</height>
@@ -394,6 +373,122 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>270</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select Profile:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="CMBBOX_SelectProfile">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>270</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PSHBTN_NewProfile">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>270</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PSHBTN_DeleteProfile">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>270</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_4">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>230</y>
+      <width>21</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>230</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Settings</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PSHBTN_SaveSettings">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>250</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="PSHBTN_UpdateSettings">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>273</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Update</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>CMBBOX_Status</zorder>
@@ -410,9 +505,17 @@
    <zorder>PSHBTN_Delete</zorder>
    <zorder>line_2</zorder>
    <zorder>line_3</zorder>
-   <zorder>line</zorder>
    <zorder>TBLW_main</zorder>
    <zorder>LBL_CurrentStep</zorder>
+   <zorder>label_4</zorder>
+   <zorder>CMBBOX_SelectProfile</zorder>
+   <zorder>PSHBTN_NewProfile</zorder>
+   <zorder>PSHBTN_DeleteProfile</zorder>
+   <zorder>line_4</zorder>
+   <zorder>line</zorder>
+   <zorder>label_5</zorder>
+   <zorder>PSHBTN_SaveSettings</zorder>
+   <zorder>PSHBTN_UpdateSettings</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -427,7 +530,11 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionLoad_Profile"/>
+    <addaction name="actionExport_Profile"/>
+    <addaction name="separator"/>
     <addaction name="ACT_GitHubPage"/>
+    <addaction name="separator"/>
     <addaction name="ACT_EXIT"/>
    </widget>
    <widget class="QMenu" name="MN_Settings">
@@ -482,6 +589,16 @@
   <action name="ACT_GitHubPage">
    <property name="text">
     <string>Github Page</string>
+   </property>
+  </action>
+  <action name="actionLoad_Profile">
+   <property name="text">
+    <string>Load Profile</string>
+   </property>
+  </action>
+  <action name="actionExport_Profile">
+   <property name="text">
+    <string>Export Profile</string>
    </property>
   </action>
  </widget>
