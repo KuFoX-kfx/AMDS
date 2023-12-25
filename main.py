@@ -7,6 +7,8 @@ from API import D_API
 import json
 import threading
 import sys
+import urllib.request 
+import os
 import time
 
 UI = UI_API.UI_API()
@@ -35,19 +37,14 @@ def AnimateStatus():
                 time.sleep(data["timeout"]/1000)
     
     
-def update_ui():
+def update_profile():
     #Fill all
     try:
-        with open("AMDS-kfx.config.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        print("load")
     except: 
-        data = {
-                 "timer": 15,
-                 "authToken": "",
-                 "status": "Online",
-                 "animation": [{"text": "AMDS By KuFoX", "emoji_name": "\u2139\ufe0f"}]
-                 }   
-        with open("AMDS-kfx.config.json", "w+", encoding="utf8") as json_file:        
-            json.dump(data, json_file) 
+        with open("Profiles\Default.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        print("default load")
         
     UI.ui.TBLW_main.setRowCount(len(data["animation"]))
 
@@ -61,11 +58,13 @@ def update_ui():
     UI.ui.PRGRSBAR_CurrentStep.setValue(0)
     UI.ui.PRGRSBAR_CurrentStep.setMaximum(len(data["animation"]))
     
-    UI.ui.LNEDIT_APIToken.setText(data["authToken"])
+    #UI.ui.LNEDIT_APIToken.setText(data["authToken"])
     
     for i in range(len(data["animation"])):
         UI.ui.TBLW_main.setItem(i, 0, QtWidgets.QTableWidgetItem(data["animation"][i]["text"]))
         UI.ui.TBLW_main.setItem(i, 1, QtWidgets.QTableWidgetItem(data["animation"][i]["emoji_name"]))
+        UI.ui.TBLW_main.setItem(i, 2, QtWidgets.QTableWidgetItem(data["animation"][i]["status"]))
+        UI.ui.TBLW_main.setItem(i, 3, QtWidgets.QTableWidgetItem(data["animation"][i]["timer"]))
         
 
 def SHAPI():
@@ -78,12 +77,10 @@ def SHAPI():
 def savejson():
     data = {
              "timer": 15,
-             "authToken": "",
              "status": "",
              "animation": []
             }
     data["timer"] = UI.ui.SPNBOX_Time.value()
-    data["authToken"] = UI.ui.LNEDIT_APIToken.text()
     data["status"] = UI.ui.CMBBOX_Status.currentText()
     for i in range(UI.ui.TBLW_main.rowCount()):
         
@@ -100,7 +97,7 @@ def savejson():
         except: timer = None
         
         data["animation"].append({"text": text, "emoji_name": emoji, "status": status, "timer": timer})
-    with open("AMDS-kfx.config.json", "w+") as json_file: json.dump(data, json_file)
+    with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "w+") as json_file: json.dump(data, json_file)
         
     
 def addline():
@@ -109,16 +106,76 @@ def addline():
 def deleteline():
     UI.ui.TBLW_main.setRowCount(UI.ui.TBLW_main.rowCount()-1)
     
+def opengithub():
+    os.startfile("https://github.com/KuFoX-kfx/AMDS")
+    
+def off():
+    try: quit()
+    except: sys.exit()
     
     
     
+def CreateNewProfile():
+    data = {
+             "timer": 15,
+             "status": "Online",
+             "animation": []
+             }
+    with open(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "w+", encoding="utf8") as json_file: json.dump(data, json_file)
+    ImportSettings()
     
     
+def SaveSettings():
+    data = {
+        "API_Token": None
+    }
+    
+    data["API_Token"] = UI.ui.LNEDIT_APIToken.text()
+        
+    with open("AMDS-cfg.kfx", "w+", encoding="utf8") as json_file: json.dump(data, json_file)
+    
+def ImportSettings():
+    try:
+        #Open Settings
+        with open("AMDS-cfg.kfx", "r", encoding="utf8") as json_file: cfg = json.load(json_file)
+    except:
+        #Create Settings
+        cfg = {
+        "API_Token": None
+                }
+        with open("AMDS-cfg.kfx", "w+", encoding="utf8") as json_file:        
+            json.dump(cfg, json_file)
+    try: 
+        with open("Profiles/Default.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+    except:
+        data = {
+                 "timer": 15,
+                 "status": "Online",
+                 "animation": [{"text": "AMDS By KuFoX", "emoji_name": "\u2139\ufe0f", "status": None, "timer": None}, {"text": "You can download on GitHub", "emoji_name": "\u2139\ufe0f", "status": None, "timer": None}]
+                 }
+        with open("Profiles/Default.AMDS-prfl.kfx", "w+", encoding="utf8") as json_file:        
+            json.dump(data, json_file)
+    
+    UI.ui.CMBBOX_SelectProfile.clear()
+    for i in os.listdir("Profiles/"):
+        if('.'.join(i.split('.')[1:]) == "AMDS-prfl.kfx"):
+            UI.ui.CMBBOX_SelectProfile.addItem('.'.join(i.split('.')[:1]))
+    #Display settings
+    UI.ui.LNEDIT_APIToken.setText(cfg["API_Token"])
     
     
-    
-    
-    
+def ExportProfile():
+    filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, "Save File", "Desktop", "AMDS Profile file (*.AMDS-prfl.kfx)")
+    if filename:
+        with open(filename, 'w') as file:
+            file.write("Welcome to GeeksCoders.com")
+            
+def ImportProfile():
+    filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, "Open File", ".", "AMDS Profile file (*.AMDS-prfl.kfx)")
+    if filename:
+        with open(filename, 'r') as file:
+            contents = file.read()
+        print(contents)
 
     
 #thr_gui = threading.Thread(target=UI.show())
@@ -128,15 +185,24 @@ def deleteline():
 
 
 def startmain():
-    UI.ui.PSHBTN_Update.clicked.connect(update_ui)
+    UI.ui.PSHBTN_Update.clicked.connect(update_profile)
     UI.ui.PSHBTN_Save.clicked.connect(savejson)
     UI.ui.CHKBOX_APIToken.stateChanged.connect(SHAPI)
     UI.ui.PSHBTN_Add.clicked.connect(addline)
     UI.ui.PSHBTN_Delete.clicked.connect(deleteline)
+    UI.ui.ACT_GitHubPage.triggered.connect(opengithub)
+    UI.ui.ACT_EXIT.triggered.connect(off)
+    UI.ui.CMBBOX_SelectProfile.currentIndexChanged.connect(update_profile)
+    UI.ui.PSHBTN_NewProfile.clicked.connect(CreateNewProfile)
+    UI.ui.PSHBTN_SaveSettings.clicked.connect(SaveSettings)
+    UI.ui.PSHBTN_UpdateSettings.clicked.connect(ImportSettings)
+    UI.ui.actionExport_Profile.triggered.connect(ExportProfile)
+    UI.ui.actionLoad_Profile.triggered.connect(ImportProfile)
+    
        
     thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
 
-    update_ui()
+    ImportSettings()
     UI.show()
     
 
