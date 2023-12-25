@@ -69,7 +69,6 @@ def update_ui():
         
 
 def SHAPI():
-    print(UI.ui.CHKBOX_APIToken.isChecked())
     if(UI.ui.CHKBOX_APIToken.isChecked()==True):
         UI.ui.LNEDIT_APIToken.setEchoMode(QtWidgets.QLineEdit.EchoMode(0))
     elif(UI.ui.CHKBOX_APIToken.isChecked()==False):
@@ -104,9 +103,11 @@ def savejson():
     with open("AMDS-kfx.config.json", "w+") as json_file: json.dump(data, json_file)
         
     
-
+def addline():
+    UI.ui.TBLW_main.setRowCount(UI.ui.TBLW_main.rowCount()+1)
     
-
+def deleteline():
+    UI.ui.TBLW_main.setRowCount(UI.ui.TBLW_main.rowCount()-1)
     
     
     
@@ -130,7 +131,9 @@ def startmain():
     UI.ui.PSHBTN_Update.clicked.connect(update_ui)
     UI.ui.PSHBTN_Save.clicked.connect(savejson)
     UI.ui.CHKBOX_APIToken.stateChanged.connect(SHAPI)
-    
+    UI.ui.PSHBTN_Add.clicked.connect(addline)
+    UI.ui.PSHBTN_Delete.clicked.connect(deleteline)
+       
     thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
 
     update_ui()
