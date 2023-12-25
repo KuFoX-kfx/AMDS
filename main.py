@@ -36,17 +36,27 @@ def AnimateStatus():
     
     
 def update_ui():
-    print("Update")
     #Fill all
-    with open("AMDS-kfx.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
+    try:
+        with open("AMDS-kfx.config.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
+    except: 
+        data = {
+                 "timer": 15,
+                 "authToken": "",
+                 "status": "Online",
+                 "animation": [{"text": "AMDS By KuFoX", "emoji_name": "\u2139\ufe0f"}]
+                 }   
+        with open("AMDS-kfx.config.json", "w+", encoding="utf8") as json_file:        
+            json.dump(data, json_file) 
+        
     UI.ui.TBLW_main.setRowCount(len(data["animation"]))
 
     UI.ui.SPNBOX_Time.setValue(int(data["timer"]))
     
-    if(data["status"]=="online"): UI.ui.CMBBOX_Status.setCurrentIndex(0)
-    elif(data["status"]=="idle"): UI.ui.CMBBOX_Status.setCurrentIndex(1)
-    elif(data["status"]=="dnd"): UI.ui.CMBBOX_Status.setCurrentIndex(2)
-    elif(data["status"]=="invisible"): UI.ui.CMBBOX_Status.setCurrentIndex(3)
+    if(data["status"]=="Online"): UI.ui.CMBBOX_Status.setCurrentIndex(0)
+    elif(data["status"]=="Idle"): UI.ui.CMBBOX_Status.setCurrentIndex(1)
+    elif(data["status"]=="DND"): UI.ui.CMBBOX_Status.setCurrentIndex(2)
+    elif(data["status"]=="Invisible"): UI.ui.CMBBOX_Status.setCurrentIndex(3)
     
     UI.ui.PRGRSBAR_CurrentStep.setValue(0)
     UI.ui.PRGRSBAR_CurrentStep.setMaximum(len(data["animation"]))
@@ -68,13 +78,12 @@ def SHAPI():
         
 def savejson():
     data = {
-    "timer": 15,
-    "authToken": "NONE",
-    "status": "idle",
-    "animation": []
-    }
+             "timer": 15,
+             "authToken": "",
+             "status": "",
+             "animation": []
+            }
     data["timer"] = UI.ui.SPNBOX_Time.value()
-    print(UI.ui.SPNBOX_Time.value())
     data["authToken"] = UI.ui.LNEDIT_APIToken.text()
     data["status"] = UI.ui.CMBBOX_Status.currentText()
     for i in range(UI.ui.TBLW_main.rowCount()):
@@ -92,7 +101,7 @@ def savejson():
         except: timer = None
         
         data["animation"].append({"text": text, "emoji_name": emoji, "status": status, "timer": timer})
-    with open("AMDS-kfx.json", "w") as json_file: json.dump(data, json_file)
+    with open("AMDS-kfx.config.json", "w+") as json_file: json.dump(data, json_file)
         
     
 
