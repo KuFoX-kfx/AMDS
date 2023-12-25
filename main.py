@@ -39,10 +39,9 @@ def update_ui():
     print("Update")
     #Fill all
     with open("AMDS-kfx.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
-    
     UI.ui.TBLW_main.setRowCount(len(data["animation"]))
-    
-    UI.ui.SPNBOX_Time.setValue(int(data["timeout"]/1000))
+
+    UI.ui.SPNBOX_Time.setValue(int(data["timer"]))
     
     if(data["status"]=="online"): UI.ui.CMBBOX_Status.setCurrentIndex(0)
     elif(data["status"]=="idle"): UI.ui.CMBBOX_Status.setCurrentIndex(1)
@@ -52,14 +51,53 @@ def update_ui():
     UI.ui.PRGRSBAR_CurrentStep.setValue(0)
     UI.ui.PRGRSBAR_CurrentStep.setMaximum(len(data["animation"]))
     
+    UI.ui.LNEDIT_APIToken.setText(data["authToken"])
+    
     for i in range(len(data["animation"])):
         UI.ui.TBLW_main.setItem(i, 0, QtWidgets.QTableWidgetItem(data["animation"][i]["text"]))
         UI.ui.TBLW_main.setItem(i, 1, QtWidgets.QTableWidgetItem(data["animation"][i]["emoji_name"]))
         
+
+def SHAPI():
+    print(UI.ui.CHKBOX_APIToken.isChecked())
+    if(UI.ui.CHKBOX_APIToken.isChecked()==True):
+        UI.ui.LNEDIT_APIToken.setEchoMode(QtWidgets.QLineEdit.EchoMode(0))
+    elif(UI.ui.CHKBOX_APIToken.isChecked()==False):
+        UI.ui.LNEDIT_APIToken.setEchoMode(QtWidgets.QLineEdit.EchoMode(2))
+        
+        
+def savejson():
+    data = {
+    "timer": 15,
+    "authToken": "NONE",
+    "status": "idle",
+    "animation": []
+    }
+    data["timer"] = UI.ui.SPNBOX_Time.value()
+    print(UI.ui.SPNBOX_Time.value())
+    data["authToken"] = UI.ui.LNEDIT_APIToken.text()
+    data["status"] = UI.ui.CMBBOX_Status.currentText()
+    for i in range(UI.ui.TBLW_main.rowCount()):
+        
+        try: text = UI.ui.TBLW_main.item(i, 0).text()
+        except: text = None
+        
+        try: emoji = UI.ui.TBLW_main.item(i, 1).text()
+        except: emoji = None
+        
+        try: status = UI.ui.TBLW_main.item(i, 2).text()
+        except: status = None
+        
+        try: timer = UI.ui.TBLW_main.item(i, 3).text()
+        except: timer = None
+        
+        data["animation"].append({"text": text, "emoji_name": emoji, "status": status, "timer": timer})
+    with open("AMDS-kfx.json", "w") as json_file: json.dump(data, json_file)
+        
     
 
     
-    
+
     
     
     
@@ -81,7 +119,8 @@ def update_ui():
 
 def startmain():
     UI.ui.PSHBTN_Update.clicked.connect(update_ui)
-    
+    UI.ui.PSHBTN_Save.clicked.connect(savejson)
+    UI.ui.CHKBOX_APIToken.stateChanged.connect(SHAPI)
     
     thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
 
