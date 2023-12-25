@@ -1,5 +1,5 @@
 from yandex_music import Client
-from Token import API
+from API import API
 
 client = Client(API).init()
 
