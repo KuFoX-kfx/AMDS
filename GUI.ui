@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>460</width>
-    <height>250</height>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -57,7 +57,10 @@
      <enum>Qt::SolidLine</enum>
     </property>
     <property name="rowCount">
-     <number>1</number>
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>4</number>
     </property>
     <attribute name="horizontalHeaderVisible">
      <bool>true</bool>
@@ -71,7 +74,6 @@
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>100</number>
     </attribute>
-    <row/>
     <column>
      <property name="text">
       <string>Text</string>
@@ -92,10 +94,6 @@
       <string>Status</string>
      </property>
     </column>
-    <column/>
-    <column/>
-    <column/>
-    <column/>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -258,6 +256,61 @@
      <enum>QProgressBar::TopToBottom</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>240</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>API Token:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>220</y>
+      <width>461</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="LNEDIT_APIToken">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>240</y>
+      <width>271</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="CHKBOX_APIToken">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>240</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show</string>
+    </property>
+   </widget>
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>CMBBOX_Status</zorder>
@@ -268,6 +321,10 @@
    <zorder>PSHBTN_Save</zorder>
    <zorder>SPNBOX_Time</zorder>
    <zorder>PRGRSBAR_CurrentStep</zorder>
+   <zorder>label_3</zorder>
+   <zorder>line</zorder>
+   <zorder>LNEDIT_APIToken</zorder>
+   <zorder>CHKBOX_APIToken</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
