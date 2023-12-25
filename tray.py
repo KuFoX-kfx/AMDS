@@ -64,7 +64,7 @@ def start():
     app = QtWidgets.QApplication(sys.argv)
     w = QtWidgets.QWidget()
     global tray_icon
-    tray_icon = SystemTrayIcon(QtGui.QIcon("icon.png"), w)
+    tray_icon = SystemTrayIcon(QtGui.QIcon("AMDS.png"), w)
     tray_icon.show()
     tray_icon.showMessage('Animate my discord status', 'Start the AMDS')
     
@@ -72,7 +72,5 @@ def start():
     
 def getanimate():
     return SystemTrayIcon.animate
-    
 
-        
         
