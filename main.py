@@ -163,7 +163,10 @@ def ImportSettings():
     #Display settings
     UI.ui.LNEDIT_APIToken.setText(cfg["API_Token"])
     
-    
+def DeleteProfile():
+    os.remove(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx")
+    ImportSettings()
+
 def ExportProfile():
     filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, "Save File", "Desktop", "AMDS Profile file (*.AMDS-prfl.kfx)")
     if filename:
@@ -196,8 +199,9 @@ def startmain():
     UI.ui.PSHBTN_NewProfile.clicked.connect(CreateNewProfile)
     UI.ui.PSHBTN_SaveSettings.clicked.connect(SaveSettings)
     UI.ui.PSHBTN_UpdateSettings.clicked.connect(ImportSettings)
-    UI.ui.actionExport_Profile.triggered.connect(ExportProfile)
-    UI.ui.actionLoad_Profile.triggered.connect(ImportProfile)
+    UI.ui.ACT_ExportProfile.triggered.connect(ExportProfile)
+    UI.ui.ACT_LoadProfile.triggered.connect(ImportProfile)
+    UI.ui.PSHBTN_DeleteProfile.clicked.connect(DeleteProfile)
     
        
     thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
