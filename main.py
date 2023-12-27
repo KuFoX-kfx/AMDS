@@ -1,5 +1,6 @@
 #Import 
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 import Discord_API
 import tray
 import UI_API
@@ -10,27 +11,38 @@ import sys
 import urllib.request 
 import os
 import time
-
+ProfileExt = ".AMDS-prfl.kfx"
+ConfigName = "AMDS-cfg.kfx"
+event = False
+cfg = {
+        "API_Token": None,
+        "Starting": False
+    }
+data = {
+             "timer": 15,
+             "status": "",
+             "animation": []
+            }
 UI = UI_API.UI_API()
 
 
 
 
-def start_animate():
-    pass
-    #tray.SystemTrayIcon.startbtn()
-    #tray.SystemTrayIcon.stopbtn()
+
+def TestAnimate():
+    len = 6
     
-def stop_animate():
-    for i in threading.enumerate():
-        if i.name=="sss":
-            pass
-            #tray.SystemTrayIcon.start.setEnabled(True)
-            #tray.SystemTrayIcon.stop.setEnabled(False)
+    global event
+    while(event):
+        for i in range(len):
+            print(f"Test animate {i}")
+            UI.ui.LBL_CurrentStep.setText(str(i))
+            time.sleep(1)
 
 def AnimateStatus():
         with open("AMDS-kfx.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
         DAPI = Discord_API.Discord_API(data["authToken"])
+        global event
         while(event):
             for i in range(len(data["animation"])):
                 DAPI.set_cstatus(text=data["animation"][i]["text"], emoji=data["animation"][i]["emoji_name"])
@@ -40,10 +52,10 @@ def AnimateStatus():
 def update_profile():
     #Fill all
     try:
-        with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}{ProfileExt}", "r", encoding="utf8") as json_file: data = json.load(json_file)
         print("load")
     except: 
-        with open("Profiles\Default.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        with open(f"Profiles\Default{ProfileExt}", "r", encoding="utf8") as json_file: data = json.load(json_file)
         print("default load")
         
     UI.ui.TBLW_main.setRowCount(len(data["animation"]))
@@ -75,11 +87,6 @@ def SHAPI():
         
         
 def savejson():
-    data = {
-             "timer": 15,
-             "status": "",
-             "animation": []
-            }
     data["timer"] = UI.ui.SPNBOX_Time.value()
     data["status"] = UI.ui.CMBBOX_Status.currentText()
     for i in range(UI.ui.TBLW_main.rowCount()):
@@ -97,7 +104,7 @@ def savejson():
         except: timer = None
         
         data["animation"].append({"text": text, "emoji_name": emoji, "status": status, "timer": timer})
-    with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "w+") as json_file: json.dump(data, json_file)
+    with open(f"Profiles\{UI.ui.CMBBOX_SelectProfile.currentText()}{ProfileExt}", "w+") as json_file: json.dump(data, json_file)
         
     
 def addline():
@@ -116,44 +123,33 @@ def off():
     
     
 def CreateNewProfile():
-    data = {
-             "timer": 15,
-             "status": "Online",
-             "animation": []
-             }
-    with open(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx", "w+", encoding="utf8") as json_file: json.dump(data, json_file)
+    with open(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}{ProfileExt}", "w+", encoding="utf8") as json_file: json.dump(data, json_file)
     ImportSettings()
     
     
 def SaveSettings():
-    data = {
-        "API_Token": None
-    }
     
-    data["API_Token"] = UI.ui.LNEDIT_APIToken.text()
+    cfg["API_Token"] = UI.ui.LNEDIT_APIToken.text()
         
-    with open("AMDS-cfg.kfx", "w+", encoding="utf8") as json_file: json.dump(data, json_file)
+    with open(ConfigName, "w+", encoding="utf8") as json_file: json.dump(cfg, json_file)
     
 def ImportSettings():
     try:
         #Open Settings
-        with open("AMDS-cfg.kfx", "r", encoding="utf8") as json_file: cfg = json.load(json_file)
+        with open(ConfigName, "r", encoding="utf8") as json_file: cfg = json.load(json_file)
     except:
         #Create Settings
-        cfg = {
-        "API_Token": None
-                }
-        with open("AMDS-cfg.kfx", "w+", encoding="utf8") as json_file:        
+        with open(ConfigName, "w+", encoding="utf8") as json_file:        
             json.dump(cfg, json_file)
     try: 
-        with open("Profiles/Default.AMDS-prfl.kfx", "r", encoding="utf8") as json_file: data = json.load(json_file)
+        with open(f"Profiles/Default{ProfileExt}", "r", encoding="utf8") as json_file: data = json.load(json_file)
     except:
         data = {
                  "timer": 15,
                  "status": "Online",
                  "animation": [{"text": "AMDS By KuFoX", "emoji_name": "\u2139\ufe0f", "status": None, "timer": None}, {"text": "You can download on GitHub", "emoji_name": "\u2139\ufe0f", "status": None, "timer": None}]
                  }
-        with open("Profiles/Default.AMDS-prfl.kfx", "w+", encoding="utf8") as json_file:        
+        with open(f"Profiles/Default{ProfileExt}", "w+", encoding="utf8") as json_file:        
             json.dump(data, json_file)
     
     UI.ui.CMBBOX_SelectProfile.clear()
@@ -164,25 +160,37 @@ def ImportSettings():
     UI.ui.LNEDIT_APIToken.setText(cfg["API_Token"])
     
 def DeleteProfile():
-    os.remove(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}.AMDS-prfl.kfx")
+    os.remove(f"Profiles/{UI.ui.CMBBOX_SelectProfile.currentText()}{ProfileExt}")
     ImportSettings()
 
 def ExportProfile():
-    filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, "Save File", "Desktop", "AMDS Profile file (*.AMDS-prfl.kfx)")
+    filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, "Save File", "Desktop", f"AMDS Profile file (*{ProfileExt})")
     if filename:
         with open(filename, 'w') as file:
             file.write("Welcome to GeeksCoders.com")
             
 def ImportProfile():
-    filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, "Open File", ".", "AMDS Profile file (*.AMDS-prfl.kfx)")
+    filename, _ = QtWidgets.QFileDialog.getOpenFileName(None, "Open File", ".", f"AMDS Profile file (*{ProfileExt})")
     if filename:
         with open(filename, 'r') as file:
             contents = file.read()
         print(contents)
 
-    
+thr_testanimate = threading.Thread(target=TestAnimate, name="testanimate")
 #thr_gui = threading.Thread(target=UI.show())
 
+def start_animate():
+    global event
+    event = True
+    thr_testanimate.start()
+    #tray.SystemTrayIcon.startbtn()
+    #tray.SystemTrayIcon.stopbtn()
+    
+def stop_animate():
+    global event
+    event = False
+            #tray.SystemTrayIcon.start.setEnabled(True)
+            #tray.SystemTrayIcon.stop.setEnabled(False)
 
 
 
@@ -202,9 +210,12 @@ def startmain():
     UI.ui.ACT_ExportProfile.triggered.connect(ExportProfile)
     UI.ui.ACT_LoadProfile.triggered.connect(ImportProfile)
     UI.ui.PSHBTN_DeleteProfile.clicked.connect(DeleteProfile)
+    UI.ui.PSHBTN_Start.clicked.connect(start_animate)
+    UI.ui.PSHBTN_Stop.clicked.connect(stop_animate)
     
        
     thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
+    
 
     ImportSettings()
     UI.show()
