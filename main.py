@@ -1,6 +1,6 @@
 #Import 
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, QThread
 import Discord_API
 import tray
 import UI_API
@@ -26,18 +26,35 @@ data = {
 UI = UI_API.UI_API()
 
 
-
-
+class Worker(QtCore.QThread):
+    maximum = pyqtSignal(int)
+    current = pyqtSignal(int)
+    finished = pyqtSignal()
+    def __init__(self):
+        super().__init__()
+        
+    def run(self):
+        len = 6
+        while(True):
+            self.maximum.emit(len)
+            for i in range(len):
+                print(f"Test animate {i}")
+                self.current.emit(i)
+                time.sleep(1)
 
 def TestAnimate():
     len = 6
     
     global event
-    while(event):
-        for i in range(len):
-            print(f"Test animate {i}")
-            UI.ui.LBL_CurrentStep.setText(str(i))
-            time.sleep(1)
+    while(True):
+        if(event):
+            UI.ui.PRGRSBAR_CurrentStep.setMaximum(len)
+            for i in range(len):
+                print(f"Test animate {i}")
+                UI.ui.LBL_CurrentStep.setText(str(i))
+                UI.ui.PRGRSBAR_CurrentStep.setValue(i+1)
+                time.sleep(1)
+        
 
 def AnimateStatus():
         with open("AMDS-kfx.json", "r", encoding="utf8") as json_file: data = json.load(json_file)
@@ -179,21 +196,26 @@ def ImportProfile():
 thr_testanimate = threading.Thread(target=TestAnimate, name="testanimate")
 #thr_gui = threading.Thread(target=UI.show())
 
-def start_animate():
-    global event
-    event = True
-    thr_testanimate.start()
-    #tray.SystemTrayIcon.startbtn()
-    #tray.SystemTrayIcon.stopbtn()
+
+def updatemaximum(val):
+    UI.ui.PRGRSBAR_CurrentStep.setMaximum(val)
     
-def stop_animate():
-    global event
-    event = False
-            #tray.SystemTrayIcon.start.setEnabled(True)
-            #tray.SystemTrayIcon.stop.setEnabled(False)
+def update(val):
+    UI.ui.PRGRSBAR_CurrentStep.setValue(val)
 
+def start_theard():
+    work = Worker()
+    work.maximum.connect(updatemaximum)
+    work.current.connect(update)
+    work.finished.connect(work.exit)
+    work.start()
 
-
+def stop_theard():
+    work = Worker()
+    print(work)
+    work.exit()
+    work.terminate()
+    work.finished.emit()
 
 def startmain():
     UI.ui.PSHBTN_Update.clicked.connect(update_profile)
@@ -210,12 +232,19 @@ def startmain():
     UI.ui.ACT_ExportProfile.triggered.connect(ExportProfile)
     UI.ui.ACT_LoadProfile.triggered.connect(ImportProfile)
     UI.ui.PSHBTN_DeleteProfile.clicked.connect(DeleteProfile)
-    UI.ui.PSHBTN_Start.clicked.connect(start_animate)
-    UI.ui.PSHBTN_Stop.clicked.connect(stop_animate)
+    UI.ui.PSHBTN_Start.clicked.connect(start_theard)
+    UI.ui.PSHBTN_Stop.clicked.connect(stop_theard)
+
     
-       
-    thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
     
+    
+    
+    
+    
+    
+    
+    #thr_animatestatus = threading.Thread(target=AnimateStatus, name="animatestatus")
+    #thr_testanimate.start()
 
     ImportSettings()
     UI.show()
